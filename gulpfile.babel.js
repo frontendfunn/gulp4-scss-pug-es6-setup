@@ -15,6 +15,9 @@ const pug = require("gulp-pug");
 const babel = require("gulp-babel");
 const concat = require("gulp-concat");
 
+// PRETTY
+var prettyHtml = require("gulp-pretty-html");
+
 const srcPaths = {
   scss: path.join(__dirname, "src", "scss"),
   js: path.join(__dirname, "src", "js"),
@@ -70,10 +73,30 @@ function jsWatcher() {
   return gulp.watch(srcPaths.js, jsTask).on("change", browserSync.reload);
 }
 
+// HTML
+
+function htmlTask() {
+  return gulp
+    .src(path.join(srcPaths.pug, "/*.html"))
+    .pipe(prettyHtml())
+    .pipe(gulp.dest(distPaths.html));
+}
+
+function htmlWatcher() {
+  return gulp.watch(srcPaths.pug, htmlTask).on("change", browserSync.reload);
+}
+
+// browsersync
 function liveReload() {
   browserSync.init({
     server: distPaths.html,
   });
 }
 
-exports.default = gulp.parallel(liveReload, scssWatcher, pugWatcher, jsWatcher);
+exports.default = gulp.parallel(
+  liveReload,
+  htmlWatcher,
+  scssWatcher,
+  pugWatcher,
+  jsWatcher
+);
