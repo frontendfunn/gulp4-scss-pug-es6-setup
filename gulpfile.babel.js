@@ -18,39 +18,42 @@ const concat = require("gulp-concat");
 // PRETTY
 var prettyHtml = require("gulp-pretty-html");
 
+// POSTCSS
+const postcss = require("gulp-postcss");
+const autoprefixer = require("autoprefixer");
+const cssnano = require("cssnano");
+
 const srcPaths = {
-  scss: path.join(__dirname, "src", "scss"),
-  js: path.join(__dirname, "src", "js"),
-  pug: path.join(__dirname, "src"),
+  tailwind: "./src/scss/tailwind.css",
+  scss: "./src/scss/*.scss",
+  css: "./src/css/*.css",
+  js: "./src/js/*.js",
+  pug: "./src/*.pug",
+  html: "./src/*.html",
 };
 
 const distPaths = {
-  css: path.join(__dirname, "dist", "css"),
-  js: path.join(__dirname, "dist", "js"),
-  html: path.join(__dirname, "dist"),
+  css: "./dist/css",
+  js: "./dist/js",
+  html: "./dist",
 };
 
 // SCSS TASK
 function scssTask() {
   return gulp
-    .src(path.join(srcPaths.scss, "**/*.scss"))
+    .src(srcPaths.scss)
     .pipe(sass().on("error", sass.logError))
     .pipe(gulp.dest(distPaths.css))
     .pipe(browserSync.stream());
 }
 
 function scssWatcher() {
-  return gulp
-    .watch(path.join(srcPaths.scss, "**/*.scss"), scssTask)
-    .on("change", browserSync.reload);
+  return gulp.watch(srcPaths.scss, scssTask).on("change", browserSync.reload);
 }
 
 // PUG TASK
 function pugTask() {
-  return gulp
-    .src(path.join(srcPaths.pug, "/*.pug"))
-    .pipe(pug())
-    .pipe(gulp.dest(distPaths.html));
+  return gulp.src(srcPaths.pug).pipe(pug()).pipe(gulp.dest(distPaths.html));
 }
 function pugWatcher() {
   return gulp.watch(srcPaths.pug, pugTask).on("change", browserSync.reload);
@@ -59,7 +62,7 @@ function pugWatcher() {
 // JS TASK
 function jsTask() {
   return gulp
-    .src(path.join(srcPaths.js, "/*.js"))
+    .src(srcPaths.js)
     .pipe(
       babel({
         presets: ["@babel/env"],
@@ -77,13 +80,28 @@ function jsWatcher() {
 
 function htmlTask() {
   return gulp
-    .src(path.join(srcPaths.pug, "/*.html"))
+    .src(srcPaths.html)
     .pipe(prettyHtml())
     .pipe(gulp.dest(distPaths.html));
 }
 
 function htmlWatcher() {
-  return gulp.watch(srcPaths.pug, htmlTask).on("change", browserSync.reload);
+  console.log(srcPaths.html);
+  return gulp.watch(srcPaths.html, htmlTask).on("change", browserSync.reload);
+}
+
+// tailwindcss
+function tailwindTask() {
+  return gulp
+    .src(srcPaths.tailwind)
+    .pipe(postcss([require("tailwindcss"), autoprefixer(), cssnano()]))
+    .pipe(gulp.dest(distPaths.css));
+}
+
+function tailwindWatcher() {
+  return gulp
+    .watch(srcPaths.tailwind, tailwindTask)
+    .on("change", browserSync.reload);
 }
 
 // browsersync
@@ -97,6 +115,7 @@ exports.default = gulp.parallel(
   liveReload,
   htmlWatcher,
   scssWatcher,
+  tailwindWatcher,
   pugWatcher,
   jsWatcher
 );
