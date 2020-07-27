@@ -4,9 +4,10 @@ const srcPaths = {
 };
 
 module.exports = {
-  purge: [
-    path.join(srcPaths.main, "/*.html"),
-  ],
+  purge: {
+    enabled: true,
+    content: [path.join(srcPaths.main, "/*.html")],
+  },
   target: "relaxed",
   prefix: "",
   important: false,

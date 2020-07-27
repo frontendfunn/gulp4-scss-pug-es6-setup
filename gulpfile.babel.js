@@ -19,11 +19,13 @@ const concat = require("gulp-concat");
 var prettyHtml = require("gulp-pretty-html");
 
 // POSTCSS
+const tailwindcss = require("tailwindcss");
 const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
 
 const srcPaths = {
+  tailwindConfig: "./tailwind.config.js",
   tailwind: "./src/scss/tailwind.css",
   scss: "./src/scss/*.scss",
   css: "./src/css/*.css",
@@ -94,8 +96,11 @@ function htmlWatcher() {
 function tailwindTask() {
   return gulp
     .src(srcPaths.tailwind)
-    .pipe(postcss([require("tailwindcss"), autoprefixer(), cssnano()]))
-    .pipe(gulp.dest(distPaths.css));
+    .pipe(
+      postcss([tailwindcss(srcPaths.tailwindConfig), autoprefixer(), cssnano()])
+    )
+    .pipe(gulp.dest(distPaths.css))
+    .pipe(browserSync.stream());
 }
 
 function tailwindWatcher() {
