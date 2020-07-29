@@ -89,7 +89,9 @@ function htmlTask() {
 
 function htmlWatcher() {
   console.log(srcPaths.html);
-  return gulp.watch(srcPaths.html, htmlTask).on("change", browserSync.reload);
+  return gulp
+    .watch(srcPaths.html, gulp.parallel(htmlTask, tailwindTask))
+    .on("change", browserSync.reload);
 }
 
 // tailwindcss
