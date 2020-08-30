@@ -4,11 +4,11 @@ This Repo is made using the gulp4, which supports `tailwind.css`.
 
 Folder Structure for the Repo
 
-![](repoReadMeImages/readmeImage.PNG)
+![](repoReadMeImages/readmeImage.JPG)
 
 - `dist` - contains the following list of folders and files
 
-  - `css` - contains compiled `src/scss/style.scss` -> `style.css` and `src/scss/tailwind.css` -> `tailwind.css`.
+  - `css` - contains compiled `src/scss/tailwind.scss` -> `tailwind.css`.
 
   - `js` - contains `script.js`.
 
@@ -16,9 +16,8 @@ Folder Structure for the Repo
 
 - `src` - contains the followinf list of folders and files
   - `js` - contains custom `script.js`
-  - `scss` - contains `style.scss` and `tailwind.css` files.
-  - `index.pug | *.pug` - supports `*.pug` files which are converted to `*.html` files inside the `dist` folder.
-  - `tailwind-index.html | *.html` - supports `*.html` files. Unused classes inside this html files are purged using `tailwind.config.js`.
+  - `scss` - contains `tailwind.scss` and other SCSS Partials `_main.scss` files.
+  - `index.html | *.html` - supports `*.html` files. Unused classes inside this html files are purged using `tailwind.config.js`.
 
 ```
 purging of classes is supported only for *.html files.

@@ -1,0 +1,8 @@
+@tailwind base;
+
+@tailwind components;
+
+// add custom components before utilities
+@import "./main";
+
+@tailwind utilities;

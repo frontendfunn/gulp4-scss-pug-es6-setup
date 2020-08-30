@@ -26,7 +26,7 @@ const cssnano = require("cssnano");
 
 const srcPaths = {
   tailwindConfig: "./tailwind.config.js",
-  tailwind: "./src/scss/tailwind.css",
+  tailwind: "./src/scss/*.scss",
   scss: "./src/scss/*.scss",
   css: "./src/css/*.css",
   js: "./src/js/*.js",
@@ -98,6 +98,7 @@ function htmlWatcher() {
 function tailwindTask() {
   return gulp
     .src(srcPaths.tailwind)
+    .pipe(sass().on("error", sass.logError))
     .pipe(
       postcss([tailwindcss(srcPaths.tailwindConfig), autoprefixer(), cssnano()])
     )
